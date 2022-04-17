@@ -1,0 +1,20 @@
+basic_packages:
+        - curl
+        - chrony
+        - iptables-services
+        - iptables-utils
+        - wget
+        - yum-utils
+
+docker_repo: https://download.docker.com/linux/centos/$releasever/$basearch/stable
+docker_gpg_key: https://download.docker.com/linux/centos/gpg
+docker_packages:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+
+docker-compose_url: "https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-$(uname -s)-$(uname -m)"
+
+trusted_ssh_ips: <Your trusted IPs seperated by comma>
+ssh_port: 22
+trusted_icmp_ips: <Your trusted IPs seperated by comma>
