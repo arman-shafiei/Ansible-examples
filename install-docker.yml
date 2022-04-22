@@ -34,9 +34,6 @@
               state: latest
             register: updated_packages
           - debug: var=updated_packages
-          - name: reboot system
-            reboot:
-                    reboot_timeout: 1000
           - name: install packages
             yum:
                     update_cache: true
@@ -67,7 +64,6 @@
                     protocol: tcp
                     destination_port: "{{ ssh_port }}"
                     jump: ACCEPT
-            when: is_exclusive == false
           - name: block untrusted ips for ssh
             iptables:
                     action: append
@@ -75,7 +71,6 @@
                     protocol: tcp
                     destination_port: "{{ ssh_port }}"
                     jump: DROP
-            when: is_exclusive == false
           - name: add trusted ips for icmp
             iptables:
                     action: insert
@@ -84,7 +79,6 @@
                     icmp_type: 8
                     source: "{{ trusted_icmp_ips }}"
                     jump: ACCEPT
-            when: is_exclusive == false
           - name: block untrusted ips for icmp
             iptables:
                     action: append
@@ -92,7 +86,6 @@
                     protocol: icmp
                     icmp_type: 8
                     jump: DROP
-            when: is_exclusive == false
           - name: make iptables rules persistent
             shell: iptables-save > /etc/sysconfig/iptables
           - name: enable iptables
