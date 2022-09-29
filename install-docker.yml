@@ -5,7 +5,7 @@
   remote_user: root
   gather_facts: false
   vars_files:
-          - ./install-docker-vars.yml
+          - ./variables/install-docker.yml
   tasks:
           - name: remove default resolver file
             file:
@@ -56,36 +56,6 @@
                     chain: INPUT
                     ctstate: ESTABLISHED,RELATED
                     jump: ACCEPT
-          - name: add trusted ips for ssh
-            iptables:
-                    action: insert
-                    chain: INPUT
-                    source: "{{ trusted_ssh_ips }}"
-                    protocol: tcp
-                    destination_port: "{{ ssh_port }}"
-                    jump: ACCEPT
-          - name: block untrusted ips for ssh
-            iptables:
-                    action: append
-                    chain: INPUT
-                    protocol: tcp
-                    destination_port: "{{ ssh_port }}"
-                    jump: DROP
-          - name: add trusted ips for icmp
-            iptables:
-                    action: insert
-                    chain: INPUT
-                    protocol: icmp
-                    icmp_type: 8
-                    source: "{{ trusted_icmp_ips }}"
-                    jump: ACCEPT
-          - name: block untrusted ips for icmp
-            iptables:
-                    action: append
-                    chain: INPUT
-                    protocol: icmp
-                    icmp_type: 8
-                    jump: DROP
           - name: make iptables rules persistent
             shell: iptables-save > /etc/sysconfig/iptables
           - name: enable iptables
@@ -115,15 +85,4 @@
                     name: docker
                     state: started
                     enabled: yes
-          - name: install docker compose
-            shell: curl -L "{{ docker-compose_url }}" -o /usr/local/bin/docker-compose
-          - name: add execute permission to docker-compose
-            file:
-                    path: /usr/local/bin/docker-compose
-                    mode: '0744'
-          - name: link docker compose executable
-            file:
-                    src: /usr/local/bin/docker-compose
-                    dest: /usr/bin/docker-compose
-                    state: link
 

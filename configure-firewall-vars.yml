@@ -1,5 +1,0 @@
----
-
-trusted_ssh_ips: <Your trusted IPs seperated by comma>
-ssh_port: 22
-trusted_icmp_ips: <Your trusted IPs seperated by comma>

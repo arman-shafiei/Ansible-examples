@@ -5,7 +5,7 @@
   remote_user: root
   gather_facts: false
   vars_files:
-          - ./configure-firewall-vars.yml
+          - ./variables/configure-firewall.yml
   tasks:
           - name: stop firewalld
             shell: systemctl disable --now firewalld
